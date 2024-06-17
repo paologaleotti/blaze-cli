@@ -9,7 +9,12 @@ import (
 	"github.com/paologaleotti/blaze-cli/util"
 )
 
-func CloneRepository(projectName string) error {
+func CloneRepository(projectName string, includeLamda bool) error {
+	if includeLamda {
+		cloneCmd := exec.Command("git", "clone", "-b", "feature/serverless", util.RepoUrl, projectName)
+		return cloneCmd.Run()
+	}
+
 	cloneCmd := exec.Command("git", "clone", util.RepoUrl, projectName)
 	return cloneCmd.Run()
 }

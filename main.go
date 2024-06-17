@@ -20,8 +20,15 @@ func main() {
 	projectName, _ := reader.ReadString('\n')
 	projectName = strings.TrimSpace(projectName)
 
+	fmt.Print("Include aws lambda support? (y/N): ")
+	lambda, _ := reader.ReadString('\n')
+	includeLambda := serverlessFromInput(lambda)
+	if includeLambda {
+		fmt.Println("Lambda support selected.")
+	}
+
 	fmt.Println("1. Cloning template...")
-	err := cli.CloneRepository(projectName)
+	err := cli.CloneRepository(projectName, includeLambda)
 	if err != nil {
 		log.Fatal("error cloning repository:", err)
 		return
@@ -52,4 +59,9 @@ func main() {
 	color.Cyan.Println("To build and test the project:")
 	color.Cyan.Println("> cd", projectName)
 	color.Cyan.Println("> make")
+}
+
+func serverlessFromInput(input string) bool {
+	in := strings.TrimSpace(input)
+	return in == "y" || in == "Y"
 }
